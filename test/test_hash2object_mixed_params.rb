@@ -32,18 +32,16 @@ end
 
 class TestMixedParams < Minitest::Test
   def test_plain_attrs
-    obj_b = MyModule::MyKlass.new(1, b3: 3, b5:5)
-    obj_b.b6 = 6
-    obj_b.inspect
+    old_obj = MyModule::MyKlass.new(1, b3: 3, b5:5)
+    old_obj.b6 = 6
 
-    avatar = Hash2obj.cast({b1: 11, b2: 12, b3: 13, b4: 14, b5: 15, b6: 16}, obj_b)
-    avatar.inspect
-    assert avatar.b1 == 11
-    assert avatar.b2 == 12
-    assert avatar.b3 == 13
-    assert avatar.b4 == 14
-    assert avatar.get_attr_b5 == 15
-    assert avatar.get_attr_b6 == 16
+    new_obj = Hash2obj.cast({b1: 11, b2: 12, b3: 13, b4: 14, b5: 15, b6: 16}, old_obj)
+    assert new_obj.b1 == 11
+    assert new_obj.b2 == 12
+    assert new_obj.b3 == 13
+    assert new_obj.b4 == 14
+    assert new_obj.get_attr_b5 == 15
+    assert new_obj.get_attr_b6 == 16
   end
 end
 

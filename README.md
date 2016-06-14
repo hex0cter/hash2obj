@@ -72,10 +72,10 @@ end
 
 old_obj = TestModule::MyKlass.new(1, b3: 3, b5:5)
 old_obj.b6 = 6
-old_obj.inspect # =>
+old_obj.inspect # => "#<MyModule::MyKlass:0x007fb402851750 @b1=1, @b2=2, @b3=3, @b4=4, @b5=5, @b6=6>"
 
 new_obj = Hash2Obj.cast({b1: 11, b2: 12, b3: 13, b4: 14, b5: 15, b6: 16}, old_obj)
-new_obj.inspect # =>
+new_obj.inspect # => "#<MyModule::MyKlass:0x007fb40225b580 @b1=11, @b2=12, @b3=13, @b4=14, @b5=15, @b6=16>"
 ```
 
 ## How to install?
