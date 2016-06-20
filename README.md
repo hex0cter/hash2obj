@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/hash2obj.svg)](https://badge.fury.io/rb/hash2obj)
 [![Build Status](https://travis-ci.org/hex0cter/hash2obj.svg?branch=master)](https://travis-ci.org/hex0cter/hash2obj)
 
-Hash2Obj is a ruby gem that converts a hash into a Ruby object.
+Hash2Obj (formerly known as clavatar) is a ruby gem that converts a hash into a Ruby object.
 
 During the web development, it is common to transfer json between the browser and the server. When the json from the
 browser presents an object, you might need to convert it back into a Ruby object on the server side.
@@ -72,10 +72,12 @@ end
 
 old_obj = TestModule::MyKlass.new(1, b3: 3, b5:5)
 old_obj.b6 = 6
-old_obj.inspect # => "#<MyModule::MyKlass:0x007fb402851750 @b1=1, @b2=2, @b3=3, @b4=4, @b5=5, @b6=6>"
+old_obj.inspect 
+# => "#<MyModule::MyKlass:0xxxxxxx @b1=1, @b2=2, @b3=3, @b4=4, @b5=5, @b6=6>"
 
 new_obj = Hash2Obj.cast({b1: 11, b2: 12, b3: 13, b4: 14, b5: 15, b6: 16}, old_obj)
-new_obj.inspect # => "#<MyModule::MyKlass:0x007fb40225b580 @b1=11, @b2=12, @b3=13, @b4=14, @b5=15, @b6=16>"
+new_obj.inspect 
+# => "#<MyModule::MyKlass:0xxxxxxx @b1=11, @b2=12, @b3=13, @b4=14, @b5=15, @b6=16>"
 ```
 
 ## How to install?
