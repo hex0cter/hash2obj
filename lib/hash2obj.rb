@@ -4,11 +4,20 @@ require 'ostruct'
 module Hash2obj
   def self.cast(hash, example)
     klass = example.class
-    accessible_attr = []
+    writable_attr = []
+    potential_keyrest_args = example.instance_variables.inject({}) { |r, s|
+      field = s.to_s.sub('@', '')
+      if hash.key? field
+        r.merge!({field.to_sym => hash[field.to_sym]})
+      elsif example.respond_to?(field)
+        r.merge!({field.to_sym => example.send(field)})
+      end
+      r
+    }
     example.instance_variables.each do |attr|
       attr = attr.to_s.sub('@', '').to_sym
       if example.respond_to? ("#{attr}=")
-        accessible_attr << attr
+        writable_attr << attr
       end
     end
 
@@ -17,6 +26,7 @@ module Hash2obj
     construct_params = example.method(:initialize).parameters
     construct_params.each do |param|
       arg_required, arg_name = param
+      potential_keyrest_args.delete "#{arg_name}".to_sym
 
       case arg_required
         when :req
@@ -32,7 +42,10 @@ module Hash2obj
       end
     end
 
-    args.map! { |val| hash[val] }
+    key_args = potential_keyrest_args.merge(key_args)
+
+    args.map! { |val| hash[val] || example.send(val) }
+
     if args.empty? and key_args.empty?
       instance = klass.send(:new)
     elsif args.empty?
@@ -43,8 +56,8 @@ module Hash2obj
       instance = klass.send(:new, *args, **key_args)
     end
 
-    accessible_attr.each do |attr|
-      instance.send("#{attr}=", hash[attr])
+    writable_attr.each do |attr|
+      instance.send("#{attr}=", hash[attr]) if hash.key? attr
     end
 
     instance
